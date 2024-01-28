@@ -73,10 +73,9 @@ function Brick(props: BrickProps) {
 
   return (
     <div className="relative w-full flex items-center bg-neutral-200 col-span-1 rounded-sm pl-8">
-      <input 
-        className="w-11/12 h-10 bg-transparent focus:outline-none focus:ring-0" 
-        placeholder="Type here..." 
-        type="text" 
+      <textarea 
+        className="w-11/12 h-12 bg-transparent focus:outline-none focus:ring-0" 
+        placeholder="Type here..."  
         value={value}
         onChange={e => handleChange(e)}
       />
