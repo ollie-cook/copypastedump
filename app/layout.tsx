@@ -18,8 +18,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         {children}
+        <p className="absolute bottom-1 left-1/2 -translate-x-1/2">Built by <a href="https://www.olliecookie.com" className="underline" target="_blank">Ollie Cook</a>&#x1f36a;</p>
       </body>
-      <p className="absolute bottom-1 left-1/2 -translate-x-1/2">Built by <a href="https://www.olliecookie.com" className="underline" target="_blank">Ollie Cook</a>&#x1f36a;</p>
     </html>
   );
 }
