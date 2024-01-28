@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react"
 import { MdContentCopy } from "react-icons/md";
+import { FiDelete } from "react-icons/fi";
 import Cookies from "js-cookie"
 
 type Brick = {
   id: number,
-  value: string
+  value: string | undefined
 }
 
 export default function Grid() {
@@ -37,25 +38,25 @@ function Brick(props: BrickProps) {
   const [value, setValue] = useState(props.initialValue)
   const [showCopied, setShowCopied] = useState(false)
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(e.target.value)
+  const handleChange = (e?: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setValue(e?.target.value || "")
 
     //update cookie
     let currentCookies = Cookies.get("brickValues");
     if (currentCookies == undefined) {
-      Cookies.set("brickValues", JSON.stringify([{id:props.id, value: e.target.value}]))
+      Cookies.set("brickValues", JSON.stringify([{id:props.id, value: e?.target.value}]))
     } else {
       let currentBrickValues: Brick[] = JSON.parse(currentCookies);
       let updatedBrickValues: Brick[] = currentBrickValues;
 
       if (currentBrickValues.find(b => b.id === props.id) == undefined) {
         //brick not yet set in cookies
-        updatedBrickValues.push({id: props.id, value: e.target.value})
+        updatedBrickValues.push({id: props.id, value: e?.target.value})
       } else {
         //brick already set in cookies
         updatedBrickValues = currentBrickValues.map(b => {
           if (b.id === props.id) {
-            return {id: props.id, value: e.target.value}
+            return {id: props.id, value: e?.target.value}
           } else {
             return b
           }
@@ -96,6 +97,9 @@ function Brick(props: BrickProps) {
           </div>
         }
       </div>
+      <button className="group absolute w-8 h-8 flex justify-center items-center bottom-2 right-2" onClick={() => handleChange()}>
+        <FiDelete className="w-6 h-6 group-hover:w-8 group-hover:h-8" />
+      </button>
     </div>
   )
 }
