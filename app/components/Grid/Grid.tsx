@@ -7,6 +7,7 @@ import Cookies from "js-cookie"
 
 type Brick = {
   id: number,
+  label: string | undefined,
   value: string | undefined
 }
 
@@ -22,7 +23,7 @@ export default function Grid() {
       {
         Array.from(Array(8).keys()).map((index) => {
           const initialBrickValue = initialBrickValues.find(b => b.id === index);
-          return <Brick key={index} id={index} initialValue={initialBrickValue?.value} />
+          return <Brick key={index} id={index} initialLabel={initialBrickValue?.label} initialValue={initialBrickValue?.value} />
         })
       }
     </div>
@@ -31,42 +32,43 @@ export default function Grid() {
 
 interface BrickProps {
   id: number,
+  initialLabel: string | undefined,
   initialValue: string | undefined
 }
 
 function Brick(props: BrickProps) {
   const [value, setValue] = useState(props.initialValue)
+  const [label, setLabel] = useState(props.initialLabel)
   const [showCopied, setShowCopied] = useState(false)
 
-  const handleChange = (e?: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(e?.target.value || "")
-
-    //update cookie
+  useEffect(() => {
     let currentCookies = Cookies.get("brickValues");
     if (currentCookies == undefined) {
-      Cookies.set("brickValues", JSON.stringify([{id:props.id, value: e?.target.value}]))
+      Cookies.set("brickValues", JSON.stringify([{id:props.id, labe: label, value: value}]))
     } else {
       let currentBrickValues: Brick[] = JSON.parse(currentCookies);
       let updatedBrickValues: Brick[] = currentBrickValues;
 
       if (currentBrickValues.find(b => b.id === props.id) == undefined) {
         //brick not yet set in cookies
-        updatedBrickValues.push({id: props.id, value: e?.target.value})
+        updatedBrickValues.push({id: props.id, label: label, value: value})
       } else {
         //brick already set in cookies
         updatedBrickValues = currentBrickValues.map(b => {
           if (b.id === props.id) {
-            return {id: props.id, value: e?.target.value}
+            return {id: props.id, label: label, value: value}
           } else {
             return b
           }
         })
       }
-      
 
       Cookies.set("brickValues", JSON.stringify(updatedBrickValues))
     }
-    
+  }, [value, label])
+
+  const handleChange = (e?: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setValue(e?.target.value || "")
   }
   
   const handleClick = async () => {
@@ -80,11 +82,17 @@ function Brick(props: BrickProps) {
 
   return (
     <div className="relative w-full flex items-center bg-neutral-200 col-span-1 rounded-sm pl-8">
+      <input 
+        className="absolute top-4 bg-transparent text-neutral-400 focus:outline-none focus:ring-0"
+        placeholder="Label"
+        value={label} 
+        onChange={e => setLabel(e.target.value)} 
+      />
       <textarea 
-        className="w-11/12 h-12 bg-transparent focus:outline-none focus:ring-0" 
+        className="w-11/12 h-12 translate-y-3 bg-transparent focus:outline-none focus:ring-0" 
         placeholder="Type here..."  
         value={value}
-        onChange={e => handleChange(e)}
+        onChange={e => setValue(e.target.value)}
       />
       <div className="absolute top-0 right-0 flex flex-col items-end pr-2 pt-2">
         <button className="group relative h-8 w-8 flex justify-center items-center" onClick={handleClick}>
