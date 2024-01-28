@@ -9,7 +9,7 @@ export default function Home() {
 
   return (
     <main className={`${darkMode==true && "dark"}`}>
-      <DarkModeToggle handleClick={() => setDarkMode(prev => !prev)} />
+      <DarkModeToggle darkMode={darkMode} handleClick={() => setDarkMode(prev => !prev)} />
       <Grid />
       <p className="absolute bottom-2 left-1/2 -translate-x-1/2 text-sm dark:text-white">Built by <a href="https://www.olliecookie.com" className="underline" target="_blank">Ollie Cook</a>&#x1f36a;</p>
     </main>
