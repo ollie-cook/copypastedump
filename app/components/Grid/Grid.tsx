@@ -35,8 +35,9 @@ interface BrickProps {
 
 function Brick(props: BrickProps) {
   const [value, setValue] = useState(props.initialValue)
+  const [showCopied, setShowCopied] = useState(false)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value)
 
     //update cookie
@@ -69,6 +70,11 @@ function Brick(props: BrickProps) {
   
   const handleClick = async () => {
     await navigator.clipboard.writeText(value || "");
+    setShowCopied(true)
+    //set timer to set showCopied to false in 2 seconds
+    setTimeout(() => {
+      setShowCopied(false)
+    }, 2000)
   }
 
   return (
@@ -79,9 +85,17 @@ function Brick(props: BrickProps) {
         value={value}
         onChange={e => handleChange(e)}
       />
-      <button className="absolute top-4 right-4" onClick={handleClick}>
-        <MdContentCopy className="w-6 h-6" />
-      </button>
+      <div className="absolute top-0 right-0 flex flex-col items-end pr-2 pt-2">
+        <button className="group relative h-8 w-8 flex justify-center items-center" onClick={handleClick}>
+          <MdContentCopy className="w-6 h-6 group-hover:w-8 group-hover:h-8" />
+        </button>
+        {
+          showCopied == true &&
+          <div className="mt-2 p-2 rounded-sm border border-neutral-300 bg-neutral-500">
+            <p className="text-white">Copied to clipboard</p>
+          </div>
+        }
+      </div>
     </div>
   )
 }
