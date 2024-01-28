@@ -19,7 +19,7 @@ export default function Grid() {
   }
 
   return (
-    <div className="w-screen min-h-screen grid grid-cols-2 gap-10 p-10">
+    <div className="w-full min-h-screen grid grid-cols-2 gap-4 p-4 md:p-10 md:gap-10">
       {
         Array.from(Array(8).keys()).map((index) => {
           const initialBrickValue = initialBrickValues.find(b => b.id === index);
@@ -81,7 +81,7 @@ function Brick(props: BrickProps) {
   }
 
   return (
-    <div className="relative w-full flex items-center bg-neutral-200 col-span-1 rounded-sm pl-8">
+    <div className="relative w-full h-40 flex items-center bg-neutral-200 col-span-2 rounded-sm pl-4 sm:pl-8 lg:col-span-1 lg:h-auto">
       <input 
         className="absolute top-4 bg-transparent text-neutral-400 focus:outline-none focus:ring-0"
         placeholder="Label"
