@@ -44,7 +44,7 @@ function Brick(props: BrickProps) {
   useEffect(() => {
     let currentCookies = Cookies.get("brickValues");
     if (currentCookies == undefined) {
-      Cookies.set("brickValues", JSON.stringify([{id:props.id, labe: label, value: value}]))
+      Cookies.set("brickValues", JSON.stringify([{id:props.id, label: label, value: value}]))
     } else {
       let currentBrickValues: Brick[] = JSON.parse(currentCookies);
       let updatedBrickValues: Brick[] = currentBrickValues;
@@ -63,7 +63,7 @@ function Brick(props: BrickProps) {
         })
       }
 
-      Cookies.set("brickValues", JSON.stringify(updatedBrickValues))
+      Cookies.set("brickValues", JSON.stringify(updatedBrickValues), {expires: 365})
     }
   }, [value, label])
 
